@@ -119,6 +119,10 @@ namespace Graphs
                         }
                         break;
                     }
+                case 3:
+                    {
+
+                    }
             }
         }
     }

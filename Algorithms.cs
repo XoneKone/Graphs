@@ -223,5 +223,52 @@ namespace Graphs
             }
             return flow;
         }
+
+        public void BronKerbosh_MIS(List<VertexGraph> R, List<VertexGraph> P, List<VertexGraph> X, Graph graph, List<List<VertexGraph>> MaxCliques)
+        {
+
+            if (!P.Any() && !X.Any())
+            {
+                if (R.Count >= 3)
+                    MaxCliques.Add(R);
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < P.Count; i++)
+                {
+                    VertexGraph v = P[i];
+
+                    List<VertexGraph> intersectionP = new List<VertexGraph>();
+                    List<VertexGraph> intersectionX = new List<VertexGraph>();
+
+                    // Пересечение с P
+                    foreach (var u in graph.GetVertexLists(v))
+                    {
+                        for (int j = 0; j < P.Count; j++)
+                        {
+                            VertexGraph w = P[j];
+                            if (u == w)
+                            {
+                                intersectionP.Add(u);
+                            }
+                        }
+
+                        // Пересечение с Х
+                        for (int k = 0; k < X.Count; k++)
+                        {
+                            VertexGraph l = X[k];
+                            if (u == l)
+                                intersectionX.Add(u);
+                        }
+                    }
+                    List<VertexGraph> R_new = new List<VertexGraph>(R);
+                    R_new.Add(v);
+                    BronKerbosh(R_new, intersectionP, intersectionX, graph, MaxCliques);
+                    P.Remove(v);
+                    X.Add(v);
+                }
+            }
+        }
     }
 }
