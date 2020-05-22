@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,30 +26,37 @@ namespace Graphs
             {
                 InputText = InputText.Replace(" ", "");
                 InputText = InputText.Replace("\r", "");
-                string[] text = InputText.Split('\n');
                 
-                for(int i =0;i<text[0].Length;i++)
-                {
-                    VertexGraph from = new VertexGraph(i);
-                    Vertices.Add(from);
-                    for (int j =0; j<text[0].Length;j++)
+                int k = 0; string[] col;
+                string[] text = InputText.Split('\n');                         
+                    foreach(var row  in text)
                     {
-                        if(text[i][j]!='0' && text[i][j] != ' ')
+                        col = row.Split(',');
+                        VertexGraph from = new VertexGraph(k);
+                        Vertices.Add(from);
+                        for (int i = 0; i < col.Length; i++)
                         {
-                            VertexGraph to = new VertexGraph(j);
-                            EdgeGraph edge;
-                            if (text[i][j] != '1') 
+                            if (col[i] != "0" && col[i] != "")
                             {
-                                int weight = int.Parse(text[i][j].ToString());
-                                edge = new EdgeGraph(from, to, weight);
+                                VertexGraph to = new VertexGraph(i);
+                                EdgeGraph edge;
+                                if (col[i] != "1")
+                                {
+                                    int weight = int.Parse(col[i]);
+                                    edge = new EdgeGraph(from, to, weight);
+                                }
+                                else
+                                    edge = new EdgeGraph(from, to);
+                                Edges.Add(edge);
                             }
-                            else                       
-                            edge = new EdgeGraph(from, to);
-                            Edges.Add(edge);
-                        }
 
+                        }
+                        k++;
                     }
-                }
+
+                    
+                    
+                
             }
         }
         public int VertexCount => Vertices.Count;

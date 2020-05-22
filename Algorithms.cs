@@ -59,12 +59,14 @@ namespace Graphs
             }
 
             int first = 0;
+            while (deg[first] %2 == 0)
+                ++first;
             int v1 = -1, v2 = -1;
             bool bad = false;
-
+            bool exist = true;
             for(int i=0;i< graph.VertexCount; i++)
             {
-                if ((deg[i] & 1) == 1)
+                if ((deg[i] %2 ) == 1)
                 {
                     if (v1 == -1)
                         v1 = i;
@@ -73,15 +75,16 @@ namespace Graphs
                     else bad = true;
                 }
             }
-            if(v1 != -1)
+            if(v1 != -1 && matrix[v1,v2]==0)
             {
                 matrix[v1, v2]++;
-                matrix[v2, v1]++; 
+                matrix[v2, v1]++;
+                exist = false;
             }
             Stack<int> st = new Stack<int>();
             st.Push(first);
             List<int> result = new List<int>();
-            while(st.Count!=0)
+            while(st.Any())
             {
                 int v = st.Peek();
                 int i;
@@ -100,9 +103,9 @@ namespace Graphs
                     st.Push(i);
                 }
             }
-            if (v1 != -1)
-                for(int i=0;i+1<result.Count;i++)
-                    if(result[i]==v1 && result[i+1]== v2 || result[i] == v2 && result[i + 1] == v1)
+            if (v1 != -1 && !exist)
+                for (int i = 0; i < result.Count; i++)
+                    if (result[i] == v1 && result[i + 1] == v2 || result[i] == v2 && result[i + 1] == v1)
                     {
                         List<int> res1 = new List<int>();
                         for (int j = i + 1; j < result.Count; j++)

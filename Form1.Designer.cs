@@ -43,6 +43,7 @@
             this.Tasks_label = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.save = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // output
@@ -51,7 +52,7 @@
             this.output.Location = new System.Drawing.Point(595, 182);
             this.output.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.output.Name = "output";
-            this.output.Size = new System.Drawing.Size(271, 219);
+            this.output.Size = new System.Drawing.Size(241, 191);
             this.output.TabIndex = 5;
             this.output.Text = "";
             // 
@@ -189,11 +190,23 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // save
+            // 
+            this.save.Location = new System.Drawing.Point(625, 393);
+            this.save.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(338, 48);
+            this.save.TabIndex = 26;
+            this.save.Text = "Сохранить результаты";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1012, 464);
+            this.Controls.Add(this.save);
             this.Controls.Add(this.Tasks);
             this.Controls.Add(this.Run1);
             this.Controls.Add(this.Tasks_label);
@@ -234,6 +247,7 @@
         private System.Windows.Forms.Label Tasks_label;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button save;
     }
 }
 
