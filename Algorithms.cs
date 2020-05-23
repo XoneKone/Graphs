@@ -257,5 +257,52 @@ namespace Graphs
                 }
             }
         }
+
+        public int[,] Floyd_Warshall(Graph graph, int[,] next)
+        {
+            int[,] d = graph.GetMatrix();
+            for (int i = 0; i < graph.VertexCount; i++)
+            {
+                next[i, i] = i;
+                d[i, i] = 0;
+                for (int j = 0; j < graph.VertexCount; j++)
+                {
+                    if (d[i, j] != 0 && i!=j)
+                        next[i, j] = j;
+                }
+            }
+
+            for(int k = 0; k<graph.VertexCount;k++)
+            {
+                for (int i = 0; i < graph.VertexCount; i++)
+                {
+                    for (int j = 0; j < graph.VertexCount; j++)
+                    {   
+                        if(d[i,k]!=0 && d[k,j]!=0 && i!=j)
+                        if(d[i,j]>d[i,k]+d[k,j] || d[i,j] == 0)
+                        {
+                            d[i, j] = d[i, k] + d[k, j];
+                            next[i, j] = next[i, k];
+                        }
+                    }
+                }
+            }
+            return d;
+        }
+
+        public void Path(VertexGraph u, VertexGraph v,int[,] next,List<VertexGraph> path)
+        {
+            if (next[u.Number, v.Number] == 0)
+            {
+                return;
+            }
+            path.Add(u);
+            while(u!=v)
+            {
+                VertexGraph n1 = new VertexGraph(next[u.Number,v.Number]);
+                u = n1;
+                path.Add(u);
+            }
+        }
     }
 }

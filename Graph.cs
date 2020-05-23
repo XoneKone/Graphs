@@ -52,11 +52,7 @@ namespace Graphs
 
                         }
                         k++;
-                    }
-
-                    
-                    
-                
+                    }               
             }
         }
         public int VertexCount => Vertices.Count;
