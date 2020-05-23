@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,15 +131,15 @@ namespace Graphs
 
             if (!P.Any() && !X.Any())
             {
-                if (R.Count >= 3)
+               //if (R.Count >= 3)
                     MaxCliques.Add(R);
                 return;
             }
             else
             {
-                for (int i = 0; i < P.Count; i++)
+                while(P.Any())
                 {
-                    VertexGraph v = P[i];
+                    VertexGraph v = P.First();
 
                     List<VertexGraph> intersectionP = new List<VertexGraph>();
                     List<VertexGraph> intersectionX = new List<VertexGraph>();
@@ -227,47 +228,30 @@ namespace Graphs
             return flow;
         }
 
-        public void BronKerbosh_MIS(List<VertexGraph> R, List<VertexGraph> P, List<VertexGraph> X, Graph graph, List<List<VertexGraph>> MaxCliques)
-        {
-
-            if (!P.Any() && !X.Any())
+        public void BronKerbosh_MIS(List<VertexGraph> R, List<VertexGraph> P, List<VertexGraph> X,Graph graph,List<List<VertexGraph>> MaxIS)
+        {        
+           if(!P.Any() && !X.Any())
             {
-                if (R.Count >= 3)
-                    MaxCliques.Add(R);
+                MaxIS.Add(R);
                 return;
             }
-            else
-            {
-                for (int i = 0; i < P.Count; i++)
+           else
+            {                            
+                while(P.Any())
                 {
-                    VertexGraph v = P[i];
-
-                    List<VertexGraph> intersectionP = new List<VertexGraph>();
-                    List<VertexGraph> intersectionX = new List<VertexGraph>();
-
-                    // Пересечение с P
+                    VertexGraph v = P.First();
+                    List<VertexGraph> P1 = new List<VertexGraph>(P);
+                    List<VertexGraph> X1 = new List<VertexGraph>(X);
+                    List<VertexGraph> R1 = new List<VertexGraph>(R);
+                    R1.Add(v);
                     foreach (var u in graph.GetVertexLists(v))
                     {
-                        for (int j = 0; j < P.Count; j++)
-                        {
-                            VertexGraph w = P[j];
-                            if (u == w)
-                            {
-                                intersectionP.Add(u);
-                            }
-                        }
-
-                        // Пересечение с Х
-                        for (int k = 0; k < X.Count; k++)
-                        {
-                            VertexGraph l = X[k];
-                            if (u == l)
-                                intersectionX.Add(u);
-                        }
+                        P1.Remove(u);
+                        X1.Remove(u);
                     }
-                    List<VertexGraph> R_new = new List<VertexGraph>(R);
-                    R_new.Add(v);
-                    BronKerbosh(R_new, intersectionP, intersectionX, graph, MaxCliques);
+                    P1.Remove(v);              
+                                                     
+                    BronKerbosh_MIS(R1, P1, X1, graph, MaxIS);
                     P.Remove(v);
                     X.Add(v);
                 }

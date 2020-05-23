@@ -129,6 +129,31 @@ namespace Graphs
                     }
                 case 3:
                     {
+                        output.Clear();
+                        List<VertexGraph> combsub = new List<VertexGraph>();
+                        List<VertexGraph> not = new List<VertexGraph>();
+                        List<List<VertexGraph>> MaxIS = new List<List<VertexGraph>>();
+                        List<VertexGraph> candidates = graph.GetVertices();
+                        List<VertexGraph> max = new List<VertexGraph>();
+                        algorithms.BronKerbosh_MIS(combsub,candidates,not,graph,MaxIS);
+                        if (MaxIS.Count > 1)
+                        {
+                            output.AppendText("Наибольшее независимое множество:\n");
+                            max = MaxIS[0];
+                            for (int i = 1; i < MaxIS.Count; i++)
+                            {
+                                if (MaxIS[i].Count > max.Count)
+                                {
+                                    max = MaxIS[i];
+                                }
+                            }
+                            foreach (var item in max)
+                            {
+                                output.AppendText(item.ToString() + " ");
+                            }
+
+                        }
+                        else { output.AppendText("Наибольшее независимого множества нет!\n"); }
                         break;
                     }
             }
