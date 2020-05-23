@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,12 +60,14 @@ namespace Graphs
             }
 
             int first = 0;
+            while (deg[first] %2 == 0)
+                ++first;
             int v1 = -1, v2 = -1;
             bool bad = false;
-
+            bool exist = true;
             for(int i=0;i< graph.VertexCount; i++)
             {
-                if ((deg[i] & 1) == 1)
+                if ((deg[i] %2 ) == 1)
                 {
                     if (v1 == -1)
                         v1 = i;
@@ -73,15 +76,16 @@ namespace Graphs
                     else bad = true;
                 }
             }
-            if(v1 != -1)
+            if(v1 != -1 && matrix[v1,v2]==0)
             {
                 matrix[v1, v2]++;
-                matrix[v2, v1]++; 
+                matrix[v2, v1]++;
+                exist = false;
             }
             Stack<int> st = new Stack<int>();
             st.Push(first);
             List<int> result = new List<int>();
-            while(st.Count!=0)
+            while(st.Any())
             {
                 int v = st.Peek();
                 int i;
@@ -100,9 +104,9 @@ namespace Graphs
                     st.Push(i);
                 }
             }
-            if (v1 != -1)
-                for(int i=0;i+1<result.Count;i++)
-                    if(result[i]==v1 && result[i+1]== v2 || result[i] == v2 && result[i + 1] == v1)
+            if (v1 != -1 && !exist)
+                for (int i = 0; i < result.Count; i++)
+                    if (result[i] == v1 && result[i + 1] == v2 || result[i] == v2 && result[i + 1] == v1)
                     {
                         List<int> res1 = new List<int>();
                         for (int j = i + 1; j < result.Count; j++)
@@ -127,15 +131,15 @@ namespace Graphs
 
             if (!P.Any() && !X.Any())
             {
-                if (R.Count >= 3)
+               //if (R.Count >= 3)
                     MaxCliques.Add(R);
                 return;
             }
             else
             {
-                for (int i = 0; i < P.Count; i++)
+                while(P.Any())
                 {
-                    VertexGraph v = P[i];
+                    VertexGraph v = P.First();
 
                     List<VertexGraph> intersectionP = new List<VertexGraph>();
                     List<VertexGraph> intersectionX = new List<VertexGraph>();
@@ -222,6 +226,36 @@ namespace Graphs
                 }
             }
             return flow;
+        }
+
+        public void BronKerbosh_MIS(List<VertexGraph> R, List<VertexGraph> P, List<VertexGraph> X,Graph graph,List<List<VertexGraph>> MaxIS)
+        {        
+           if(!P.Any() && !X.Any())
+            {
+                MaxIS.Add(R);
+                return;
+            }
+           else
+            {                            
+                while(P.Any())
+                {
+                    VertexGraph v = P.First();
+                    List<VertexGraph> P1 = new List<VertexGraph>(P);
+                    List<VertexGraph> X1 = new List<VertexGraph>(X);
+                    List<VertexGraph> R1 = new List<VertexGraph>(R);
+                    R1.Add(v);
+                    foreach (var u in graph.GetVertexLists(v))
+                    {
+                        P1.Remove(u);
+                        X1.Remove(u);
+                    }
+                    P1.Remove(v);              
+                                                     
+                    BronKerbosh_MIS(R1, P1, X1, graph, MaxIS);
+                    P.Remove(v);
+                    X.Add(v);
+                }
+            }
         }
     }
 }

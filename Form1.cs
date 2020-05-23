@@ -87,16 +87,24 @@ namespace Graphs
                         List<VertexGraph> not = new List<VertexGraph>();
                         List<List<VertexGraph>> MaxCliques = new List<List<VertexGraph>>();
                         List<VertexGraph> candidates =  graph.GetVertices();
+                        List<VertexGraph> max = new List<VertexGraph>();
                         algorithms.BronKerbosh(combsub, candidates, not, graph,  MaxCliques);
                         if (MaxCliques.Count > 1)
                         {
                             output.AppendText("Наибольшая клика:\n");
-                            MaxCliques.Sort();                                                        
-                            foreach (var v in MaxCliques.Last())
+                            max = MaxCliques[0];
+                            for (int i = 1; i < MaxCliques.Count; i++)
                             {
-                                output.AppendText(v.ToString() + " ");
+                                if(MaxCliques[i].Count > max.Count)
+                                {
+                                    max = MaxCliques[i];
+                                }
                             }
-    
+                            foreach (var item in max)
+                            {
+                                output.AppendText(item.ToString() + " ");
+                            }
+                                                          
                         }
                         else { output.AppendText("Наибольших клик нет!\n"); }
                         break;
@@ -119,7 +127,48 @@ namespace Graphs
                         }
                         break;
                     }
+                case 3:
+                    {
+                        output.Clear();
+                        List<VertexGraph> combsub = new List<VertexGraph>();
+                        List<VertexGraph> not = new List<VertexGraph>();
+                        List<List<VertexGraph>> MaxIS = new List<List<VertexGraph>>();
+                        List<VertexGraph> candidates = graph.GetVertices();
+                        List<VertexGraph> max = new List<VertexGraph>();
+                        algorithms.BronKerbosh_MIS(combsub,candidates,not,graph,MaxIS);
+                        if (MaxIS.Count > 1)
+                        {
+                            output.AppendText("Наибольшее независимое множество:\n");
+                            max = MaxIS[0];
+                            for (int i = 1; i < MaxIS.Count; i++)
+                            {
+                                if (MaxIS[i].Count > max.Count)
+                                {
+                                    max = MaxIS[i];
+                                }
+                            }
+                            foreach (var item in max)
+                            {
+                                output.AppendText(item.ToString() + " ");
+                            }
+
+                        }
+                        else { output.AppendText("Наибольшее независимого множества нет!\n"); }
+                        break;
+                    }
             }
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.CreatePrompt = true;
+            saveFileDialog1.OverwritePrompt = true;
+            if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            string filename = saveFileDialog1.FileName;
+            string filetext = output.Text;
+            File.WriteAllText(filename, filetext);
+            MessageBox.Show("Результаты сохранены");
         }
     }
 }
