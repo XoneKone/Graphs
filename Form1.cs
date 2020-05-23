@@ -156,6 +156,31 @@ namespace Graphs
                         else { output.AppendText("Наибольшее независимого множества нет!\n"); }
                         break;
                     }
+                case 4:
+                    {
+                        output.Clear();                       
+                        int[,] next = new int[graph.VertexCount,graph.VertexCount];
+                        int[,] distanse = algorithms.Floyd_Warshall(graph, next);
+                        VertexGraph start = new VertexGraph(0);
+                        VertexGraph finish= new VertexGraph(graph.VertexCount-1);
+                        List<VertexGraph> path = new List<VertexGraph>();
+                        algorithms.Path(start, finish, next, path);
+
+                        output.AppendText("Матрица кратчайших расстояний:\n");
+                        int rows = distanse.GetUpperBound(0) + 1;
+                        for (int i = 0; i < rows; i++)
+                        {
+                            for (int j = 0; j < rows; j++)
+                                output.AppendText(distanse[i, j].ToString() + " ");
+                            output.AppendText("\n");
+                        }
+                        output.AppendText($"\nКратчайший путь от вершины "+start.ToString()+ " до " +finish.ToString()+":\n");
+                        foreach (var item in path)
+                        {
+                            output.AppendText(item.ToString() + " ");
+                        }
+                        break;
+                    }
             }
         }
 

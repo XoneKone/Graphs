@@ -53,9 +53,7 @@ namespace Graphs
             if (((object)v1) == null || ((object)v2) == null)
                 return !Object.Equals(v1, v2);
             return !(v1.Equals(v2));
-        }
-
-        
+        }        
         public override string ToString()
         {
             return Number.ToString();
