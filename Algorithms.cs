@@ -60,8 +60,12 @@ namespace Graphs
             }
 
             int first = 0;
-            while (deg[first] %2 == 0)
+            while (deg[first] % 2 == 0)
+            {
                 ++first;
+                if (first == graph.VertexCount) { --first; break; }
+            
+            }
             int v1 = -1, v2 = -1;
             bool bad = false;
             bool exist = true;

@@ -72,10 +72,17 @@ namespace Graphs
                             output.AppendText("Нет эйлерова пути!\n");
                         else
                         {
-                            output.AppendText("Эйлеров путь:\n");
-                            foreach (var v in res)
+                            if (res.First() == res.Last())
                             {
-                                output.AppendText(v.ToString() + " ");
+                                output.AppendText("Граф НЕ полуэйлеровый, а эйлеровый!");
+                            }
+                            else
+                            {
+                                output.AppendText("Граф полуэйлеровый!\nЭйлеров путь:\n");
+                                foreach (var v in res)
+                                {
+                                    output.AppendText(v.ToString() + " ");
+                                }
                             }
                         }
                         break;
