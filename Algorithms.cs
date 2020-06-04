@@ -108,7 +108,7 @@ namespace Graphs
                     st.Push(i);
                 }
             }
-            if (v1 != -1 && !exist)
+            if (v1 != -1 && !exist && !bad)
                 for (int i = 0; i < result.Count; i++)
                     if (result[i] == v1 && result[i + 1] == v2 || result[i] == v2 && result[i + 1] == v1)
                     {
